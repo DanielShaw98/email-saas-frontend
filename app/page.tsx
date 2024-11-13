@@ -1,7 +1,8 @@
-
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <h1>Hello World</h1>
+    <div className="p-4">
+      <h2>Welcome to My Email SaaS Platform!</h2>
+      <p>Your journey to better email management starts here.</p>
+    </div>
   );
 }
