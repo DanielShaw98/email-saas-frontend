@@ -14,11 +14,10 @@ export const registerUser = async (email: string, password: string, firstName: s
 
 export const loginUser = async (email: string, password: string) => {
   const response = await api.post('/auth/login', { email, password });
-  return response.data;
-};
 
-// Setup on backend
-export const logoutUser = async () => {
-  const response = await api.post('/auth/logout');
+  if (response.data.token) {
+    localStorage.setItem('authToken', response.data.token);
+  }
+
   return response.data;
 };

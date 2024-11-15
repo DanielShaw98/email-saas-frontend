@@ -1,21 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { registerUser } from "@/lib/api";
+import { useState } from 'react';
+import { registerUser } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [error, setError] = useState("");  // Error state for feedback
+  const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const newUser = await registerUser(email, password, firstName, lastName);
-      console.log("User registered:", newUser);
+
+      if (newUser.token) {
+        localStorage.setItem('authToken', newUser.token);
+        console.log("User registered:", newUser);
+        router.push("/");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     } catch (error) {
       console.error("Registration failed:", error);
+      setError("An error occurred during registration.");
     }
   };
 
@@ -50,6 +61,7 @@ const RegisterPage = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
+      {error && <p className="text-red-500">{error}</p>}
       <button type="submit">Register</button>
     </form>
   );

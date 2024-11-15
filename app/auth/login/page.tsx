@@ -1,19 +1,29 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { loginUser } from "@/lib/api";
+import { useState } from 'react';
+import { loginUser } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const userData = await loginUser(email, password);
-      console.log("User logged in:", userData);
+
+      if (userData.token) {
+        console.log("User logged in:", userData);
+        router.push("/");
+      } else {
+        setError("Login failed. Please check your credentials.");
+      }
     } catch (error) {
       console.error("Login failed:", error);
+      setError("An error occurred during login.");
     }
   };
 
@@ -34,6 +44,7 @@ const LoginPage = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
+      {error && <p className="text-red-500">{error}</p>}
       <button type="submit">Login</button>
     </form>
   );
