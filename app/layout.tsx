@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { AuthProvider } from '../context/AuthContext';
 
 export const metadata: Metadata = {
   title: "Email SaaS",
@@ -20,11 +21,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-            <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+              <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
